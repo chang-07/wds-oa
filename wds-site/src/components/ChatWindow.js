@@ -157,16 +157,31 @@ const ChatWindow = ({ currentUserId, newChannel }) => {
               <p>No messages yet.</p>
             ) : (
               channels.find(c => c._id === activeTab)?.messages?.map((msg) => {
-                console.log('Rendering message:', msg, 'currentUserId:', currentUserId);
-                const isSent = msg.sender && msg.sender._id === currentUserId;
-                console.log('isSent:', isSent, 'msg.sender._id:', msg.sender?._id, 'currentUserId:', currentUserId);
-                return (
-                  <div key={msg._id} className={`chat-message ${isSent ? 'sent' : 'received'}`}>
-                    <span className="message-sender">{msg.sender ? msg.sender.username : 'Unknown'}: </span>
-                    <span className="message-content">{msg.content}</span>
-                    <span className="message-timestamp">{new Date(msg.timestamp).toLocaleTimeString()}</span>
-                  </div>
-                );
+                // console.log('Rendering message:', msg, 'currentUserId:', currentUserId); // Keep for debugging if needed
+                // let isSent = msg.sender && msg.sender._id === currentUserId; // No longer needed for first message
+
+                const channel = channels.find(c => c._id === activeTab);
+                const isFirstMessage = channel && channel.messages && channel.messages[0]?._id === msg._id;
+
+                if (isFirstMessage) {
+                  return (
+                    <div key={msg._id} className="chat-header-message"> {/* New class for header style */}
+                      <h3>{msg.content}</h3> {/* Display content as a header */}
+                      <span className="message-timestamp">{new Date(msg.timestamp).toLocaleTimeString()}</span>
+                    </div>
+                  );
+                } else {
+                  // Existing logic for regular messages
+                  const isSent = msg.sender && msg.sender._id === currentUserId;
+                  // console.log('isSent:', isSent, 'msg.sender._id:', msg.sender?._id, 'currentUserId:', currentUserId); // Keep for debugging if needed
+                  return (
+                    <div key={msg._id} className={`chat-message ${isSent ? 'sent' : 'received'}`}>
+                      <span className="message-sender">{msg.sender ? msg.sender.username : 'Unknown'}: </span>
+                      <span className="message-content">{msg.content}</span>
+                      <span className="message-timestamp">{new Date(msg.timestamp).toLocaleTimeString()}</span>
+                    </div>
+                  );
+                }
               })
             )}
           </div>
