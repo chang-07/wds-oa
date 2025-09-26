@@ -1,6 +1,6 @@
 # I LOVEEE WDS 
 
-##WDS Project
+## WDS Project
 
 Simple messaging app that connects a React frontend to a MongoDB DB, storing accounts and message logs...
 
